@@ -2,9 +2,9 @@ module.exports = class {
   constructor(values = []) {
     this.values = [];
 
-    values.forEach((value) => {
+    for (const value of values) {
       this.add(value);
-    });
+    }
   }
 
   [Symbol.iterator]() {
