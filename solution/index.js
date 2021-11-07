@@ -1,48 +1,44 @@
 module.exports = class {
   constructor(values = []) {
-    this.values = [];
+    this._values = [];
 
     for (const value of values) {
       this.add(value);
     }
   }
 
-  [Symbol.iterator]() {
-      return this.values[Symbol.iterator]();
-  }
-
   add(value) {
     if (!this.has(value)) {
-      this.values.push(value);
+      this._values.push(value);
     }
 
     return this;
   }
 
   delete(value) {
-    const idx = this.values.indexOf(value);
-    this.values.splice(idx, 1);
+    const idx = this._values.indexOf(value);
+    this._values.splice(idx, 1);
   }
 
   has(value) {
-    return this.values.includes(value);
+    return this._values.includes(value);
   }
 
   get size() {
-    return this.values.length;
+    return this._values.length;
   }
 
   clear() {
-    this.values = [];
+    this._values = [];
   }
 
   forEach(cb, thisArg) {
     if (thisArg) {
-      this.values.forEach(value => {
+      this._values.forEach(value => {
         cb.call(thisArg, value);
       });
     } else {
-      this.values.forEach(value => {
+      this._values.forEach(value => {
         cb(value);
       });
     }
@@ -57,7 +53,11 @@ module.exports = class {
   }
 
   entries() {
-    return this.values.map(item => [item, item])[Symbol.iterator]();
+    return this._values.map(item => [item, item])[Symbol.iterator]();
+  }
+
+  [Symbol.iterator]() {
+    return this._values[Symbol.iterator]();
   }
 
   get [Symbol.toStringTag]() {
