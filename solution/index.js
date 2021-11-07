@@ -56,14 +56,15 @@ module.exports = class {
   }
 
   forEach(cb, thisArg) {
-    Object.values(this.values).forEach(value => {
-      if (arguments.length === 2) {
+    if (thisArg) {
+      Object.values(this.values).forEach(value => {
         cb.call(thisArg, value);
-      }
-      else {
+      });
+    } else {
+      Object.values(this.values).forEach(value => {
         cb(value);
-      }
-    });
+      });
+    }
   }
 
   keys() {
