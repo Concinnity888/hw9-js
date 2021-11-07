@@ -1,6 +1,6 @@
 module.exports = class {
   constructor(values = []) {
-    this.values = {};
+    this.values = [];
 
     values.forEach((value) => {
       this.add(value);
@@ -8,43 +8,24 @@ module.exports = class {
   }
 
   [Symbol.iterator]() {
-    const values = Object.keys(this.values);
-    let idx = 0;
-    console.log(1, values);
-
-    return {
-      next() {
-        const result = {
-          value: Number(values[idx]) || values[idx],
-          done: idx >= values.length
-        };
-
-        idx++;
-
-        return result;
-      }
-    }
+      return this.values[Symbol.iterator]();
   }
 
   add(value) {
-    if (!this.values.hasOwnProperty(value)) {
-      this.values[value] = typeof value;
+    if (!this.has(value)) {
+      this.values.push(value);
     }
 
     return this;
   }
 
   delete(value) {
-    if (!this.values.hasOwnProperty(value)) {
-      return false;
-    }
-
-    delete this.values[value];
-    return true;
+    const idx = this.values.indexOf(value);
+    this.values.splice(idx, 1);
   }
 
   has(value) {
-    return this.values.hasOwnProperty(value);
+    return this.values.includes(value);
   }
 
   get size() {
@@ -52,23 +33,23 @@ module.exports = class {
   }
 
   clear() {
-    this.values = {};
+    this.values = [];
   }
 
   forEach(cb, thisArg) {
     if (thisArg) {
-      Object.values(this.values).forEach(value => {
+      this.values.forEach(value => {
         cb.call(thisArg, value);
       });
     } else {
-      Object.values(this.values).forEach(value => {
+      this.values.forEach(value => {
         cb(value);
       });
     }
   }
 
   keys() {
-    return this.values();
+    return this[Symbol.iterator]();
   }
 
   values() {
@@ -76,7 +57,7 @@ module.exports = class {
   }
 
   entries() {
-    return Object.values(this.values).map(item => [item, item])[Symbol.iterator]();
+    return this.values.map(item => [item, item])[Symbol.iterator]();
   }
 
   get [Symbol.toStringTag]() {
