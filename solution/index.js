@@ -29,7 +29,7 @@ module.exports = class {
   }
 
   get size() {
-    return Object.values(this.values).length;
+    return this.values.length;
   }
 
   clear() {
